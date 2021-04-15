@@ -1,0 +1,13 @@
+#+TITLE: XState Jest Tools
+
+A small set of disparate tools for testing XState machines with Jest.
+
+* How to edit
+
+This modules are written in Emacs Org-Mode in Literate Programming (LP) style using Babel.
+
+You can edit the JavaScript in the =src= directory directly and disregard the above.
+
+Alternatively, you can edit the =.org= files in the =literate= directory. To update the =.js= files in the =src= directory with your changes, use =M-x org-babel-tangle= in Emacs.
+
+You may use either option to submit a Pull Request. If you edit the JS directly, I may reject the Pull Request and make the same changes in the literate style. If so, I will credit you.
