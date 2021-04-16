@@ -1,3 +1,10 @@
+// Implementation
+
+// A Jest Custom Matcher, almost straight from the docs, https://jestjs.io/docs/expect#custom-matchers-api.
+
+// This uses XState's built in =state.matches=. See https://xstate.js.org/api/classes/state.html#matches.
+
+
 // [[file:../literate/XStateJestMatchers.org::*Implementation][Implementation:1]]
 export function toMatchState(received, expected) {
     const options = {

@@ -1,9 +1,15 @@
+// Preamble
+
+
 // [[file:../literate/XStateJestMatchersTests.org::*Preamble][Preamble:1]]
 import { Machine } from "xstate";
 import * as JestMatcherUtils from "jest-matcher-utils";
 import { toMatchState } from "../src/xstate-jest-matchers";
 expect.extend({ toMatchState });
 // Preamble:1 ends here
+
+// Tests
+
 
 // [[file:../literate/XStateJestMatchersTests.org::*Tests][Tests:1]]
 describe("Jest custom matcher toMatchState with simple machine", () => {

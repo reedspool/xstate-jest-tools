@@ -1,5 +1,5 @@
 #+TITLE: Index Tests
-#+PROPERTY: header-args    :comments link :tangle ../test/index.test.js
+#+PROPERTY: header-args    :comments both :tangle ../test/index.test.js
 
 * Preamble
 

@@ -1,5 +1,5 @@
 #+TITLE: XState Jest Matchers Tests
-#+PROPERTY: header-args    :comments link :tangle ../test/xstate-jest-matchers.test.js
+#+PROPERTY: header-args    :comments both :tangle ../test/xstate-jest-matchers.test.js
 
 * Preamble
 

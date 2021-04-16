@@ -1,7 +1,10 @@
 #+TITLE: XState Jest Matchers
-#+PROPERTY: header-args    :comments link :tangle ../src/xstate-jest-matchers.js
+#+PROPERTY: header-args    :comments both :tangle ../src/xstate-jest-matchers.js
 
 * Usage
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 
 Note Jest =expect= exists implicitly and does not need to be imported.
 

@@ -1,12 +1,23 @@
 #+TITLE: XState Test Interpreter
-#+PROPERTY: header-args    :comments link :tangle ../src/xstate-test-interpreter.js
+#+PROPERTY: header-args    :comments both :tangle ../src/xstate-test-interpreter.js
 
 * Usage
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 
-#+begin_src js :tangle no
+The following is example code of how one might use this.
+
+Import along with XState:
+
+#+begin_src js
 import { TestInterpreter } from "xstate-test-tools"
 import { Machine } from "xstate";
+#+end_src
 
+Make a new XState machine as normal.
+
+#+begin_src js
 const machine = Machine({
         id: "myMachine",
         initial: "in",
@@ -15,21 +26,38 @@ const machine = Machine({
             out: { on: { IN: "in" } }
         }
     });
+#+end_src
 
-const interpreter = TestInterpreter(Machine);
+Instantiate the interpreter with that machine
 
-// Initial state and context before transitioning
+#+begin_src js
+const interpreter = TestInterpreter(machine);
+#+end_src
+
+Access initial state and context before transitioning.
+
+#+begin_src js
 console.log(`Initial state: ${interpreter.S}`);
 console.log(`Initial context: ${interpreter.C}`);
+#+end_src
 
-// Convenience shorthand for the equivalent:
+The above is convenient shorthand for the equivalent:
+
+#+begin_src js
 console.log(`Initial state: ${interpreter.state}`);
 console.log(`Initial context: ${interpreter.state.context}`);
+#+end_src
 
-// Send an event
+Send an event just like XState's built-in interpreter:
+
+#+begin_src js
 interpreter.send("OUT");
+interpreter.send({ type: "OUT" }); // Same as above
+#+end_src
 
-// After
+Inspect later state the exact same way as initial state:
+
+#+begin_src js
 console.log(`New state: ${interpreter.S}`);
 console.log(`New context: ${interpreter.C}`);
 #+end_src
