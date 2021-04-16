@@ -5,7 +5,7 @@ A small set of disparate tools for testing XState machines with Jest.
 * How to install from GitHub
 
 #+begin_src sh
-npm install https://github.com/reedspool/xstate-jest-tools
+npm install -D https://github.com/reedspool/xstate-jest-tools
 #+end_src
 
 * Usage
