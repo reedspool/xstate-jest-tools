@@ -42,7 +42,7 @@ it("Works as expected", () => {
 });
 
 it("Transitions as expected", () => {
-    interpreter.transition("OUT")
+    interpreter.send("OUT")
     expect(interpreter.S).toMatchState("out");
 });
 #+end_src

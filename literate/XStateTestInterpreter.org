@@ -22,8 +22,12 @@ const interpreter = TestInterpreter(Machine);
 console.log(`Initial state: ${interpreter.S}`);
 console.log(`Initial context: ${interpreter.C}`);
 
+// Convenience shorthand for the equivalent:
+console.log(`Initial state: ${interpreter.state}`);
+console.log(`Initial context: ${interpreter.state.context}`);
+
 // Send an event
-interpreter.transition("OUT");
+interpreter.send("OUT");
 
 // After
 console.log(`New state: ${interpreter.S}`);
@@ -32,27 +36,53 @@ console.log(`New context: ${interpreter.C}`);
 
 * Implementation
 
+I'm averse to the =new= keyword, so the actual export will be a wrapper for that:
+
 #+begin_src js
-export const TestInterpreter = (machine) => {
-    return new _TestInterpreter(machine);
+export const TestInterpreter = (...args) => {
+    return new _TestInterpreter(...args);
 }
+#+end_src
 
-function _TestInterpreter(machine) {
-    this.machine = machine;
-    this.S = machine.initialState;
-    this.C = this.S.context;
-}
+Now the internal implementation as a =class=.
 
-_TestInterpreter.prototype.transition = function (event) {
-    this.S = this.machine.transition(this.S, event);
-    this.C = this.S.context;
+#+begin_src js
+class _TestInterpreter {
+#+end_src
 
-    // Get the side-effect actions to execute
-    const { actions } = this.S;
+Using XState, referencing =machine.state= and =machine.state.context= is so common that I like to use shorthand, =interpreter.S= and =interpreter.C= respectively.
 
-    actions.forEach(action => {
-        // If the action is executable, execute it
-        action.exec && action.exec();
-    });
+When the machine has just been instantiated, =machine.initialState= is actually the only state.
+
+#+begin_src js
+    constructor(machine) {
+        this.machine = machine;
+        this.state = machine.initialState;
+        this.S = this.state;
+        this.C = this.state.context;
+    }
+#+end_src
+
+To affect a change, the user will =send= an =event=.
+
+When a transition occurs, we also execute any actions described as side effects. See [[https://xstate.js.org/docs/guides/interpretation.html#custom-interpreters][XState Custom Interpreters]] for more info.
+
+#+begin_src js
+    send (event) {
+        this.state = this.machine.transition(this.state, event);
+        this.S = this.state;
+        this.C = this.state.context;
+
+        // Get the side-effect actions to execute
+        this.state.actions.forEach(action => {
+            // If the action is executable, execute it
+            action.exec && action.exec();
+        });
+    }
+#+end_src
+
+Wrap up the class definition:
+
+#+begin_src js
 }
 #+end_src
