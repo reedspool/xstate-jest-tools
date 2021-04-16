@@ -2,12 +2,70 @@
 
 A small set of disparate tools for testing XState machines with Jest.
 
+* How to install from GitHub
+
+#+begin_src sh
+npm install https://github.com/reedspool/xstate-jest-tools
+#+end_src
+
+* Usage
+
+The =TestInterpreter= and =expect.toMatchState()= are meant to work together, as shown below. If you want to see how to use each individually, look at their docs:
+
+- [[file:literate/XStateTestInterpreter.org::*Usage][XState Test Interpreter Usage]]
+- [[file:literate/XStateJestMatchers.org::*Usage][Jest extension expect.toMatchState() Usage]]
+
+All together now:
+
+#+begin_src js
+import { Machine } from "xstate";
+import { toMatchState, TestInterpreter } from "xstate-test-tools";
+
+const machine = Machine({
+        id: "myMachine",
+        initial: "in",
+        states: {
+            in: { on: { OUT: "out" } },
+            out: { on: { IN: "in" } }
+        }
+    });
+
+// Make a mutable variable at the top level to be reset "beforeEachTest"
+let interpreter;
+
+beforeEach(() => {
+    interpreter = TestInterpreter(machine);
+});
+
+it("Works as expected", () => {
+    expect(interpreter.S).toMatchState("in");
+});
+
+it("Transitions as expected", () => {
+    interpreter.transition("OUT")
+    expect(interpreter.S).toMatchState("out");
+});
+#+end_src
 * How to edit
 
 This modules are written in Emacs Org-Mode in Literate Programming (LP) style using Babel.
 
 You can edit the JavaScript in the =src= directory directly and disregard the above.
 
-Alternatively, you can edit the =.org= files in the =literate= directory. To update the =.js= files in the =src= directory with your changes, use =M-x org-babel-tangle= in Emacs.
+Alternatively, you can edit the =.org= files in the =literate= directory. To update the =.js= files in the =src= directory with your changes, do these two steps for *each* file edited:
+
+1. Move your pointer to the line at the top of the file which starts with =#+PROPERTY: header-args= and hit =C-c C-c= to refresh your local setup. You only need to do this the first time you edit this file.
+2. Execute =M-x org-babel-tangle= in Emacs.
 
 You may use either option to submit a Pull Request. If you edit the JS directly, I may reject the Pull Request and make the same changes in the literate style. If so, I will credit you.
+
+* Explanation for miscellaneous files
+** =babel.config.js=
+
+Jest unfortunately does not work out of the box with =import= syntax.
+
+I solved this issue by adding a single dependency, =@babel/preset-env,= and a single file, =babel.config.js=:
+
+#+begin_src js :tangle babel.config.js
+module.exports = { presets: [ "@babel/preset-env" ] }
+#+end_src

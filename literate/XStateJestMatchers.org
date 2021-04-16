@@ -1,0 +1,50 @@
+#+TITLE: XState Jest Matchers
+#+PROPERTY: header-args    :comments link :tangle ../src/xstate-jest-matchers.js
+
+* Usage
+
+Note Jest =expect= exists implicitly and does not need to be imported.
+
+#+begin_src js
+import { Machine } from "xstate";
+import { toMatchState } from "xstate-test-tools";
+
+// Load it into Jest expect
+expect.extend({ toMatchState });
+
+const machine = Machine({
+        id: "myMachine",
+        initial: "in",
+        states: {
+            in: { on: { OUT: "out" } },
+            out: { on: { IN: "in" } }
+        }
+    });
+
+it("Machine works how one would expect", () => {
+    expect(machine.initialState).toMatchState("in");
+})
+#+end_src
+
+* Implementation
+
+#+begin_src js
+export function toMatchState(received, expected) {
+    const options = {
+        comment: 'XState.State.matches',
+        isNot: this.isNot,
+        promise: this.promise,
+    };
+    const actual = received.value;
+
+    const pass = received.matches(expected);
+
+    const message = () =>
+        this.utils.matcherHint('toMatchState', "state", "matcher", options) +
+        '\n\n' +
+        `Expected: ${this.utils.printExpected(expected)}\n` +
+        `Received: ${this.utils.printReceived(actual)}`
+
+    return { actual, pass, message };
+}
+#+end_src

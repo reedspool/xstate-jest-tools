@@ -1,0 +1,58 @@
+#+TITLE: XState Test Interpreter
+#+PROPERTY: header-args    :comments link :tangle ../src/xstate-test-interpreter.js
+
+* Usage
+
+#+begin_src js :tangle no
+import { TestInterpreter } from "xstate-test-tools"
+import { Machine } from "xstate";
+
+const machine = Machine({
+        id: "myMachine",
+        initial: "in",
+        states: {
+            in: { on: { OUT: "out" } },
+            out: { on: { IN: "in" } }
+        }
+    });
+
+const interpreter = TestInterpreter(Machine);
+
+// Initial state and context before transitioning
+console.log(`Initial state: ${interpreter.S}`);
+console.log(`Initial context: ${interpreter.C}`);
+
+// Send an event
+interpreter.transition("OUT");
+
+// After
+console.log(`New state: ${interpreter.S}`);
+console.log(`New context: ${interpreter.C}`);
+#+end_src
+
+* Implementation
+
+#+begin_src js
+export const TestInterpreter = (machine) => {
+    return new _TestInterpreter(machine);
+}
+
+function _TestInterpreter(machine) {
+    this.machine = machine;
+    this.S = machine.initialState;
+    this.C = this.S.context;
+}
+
+_TestInterpreter.prototype.transition = function (event) {
+    this.S = this.machine.transition(this.S, event);
+    this.C = this.S.context;
+
+    // Get the side-effect actions to execute
+    const { actions } = this.S;
+
+    actions.forEach(action => {
+        // If the action is executable, execute it
+        action.exec && action.exec();
+    });
+}
+#+end_src

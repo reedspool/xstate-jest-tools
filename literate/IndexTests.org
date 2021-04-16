@@ -1,0 +1,23 @@
+#+TITLE: Index Tests
+#+PROPERTY: header-args    :comments link :tangle ../test/index.test.js
+
+* Preamble
+
+#+begin_src js
+import { toMatchState } from "../src/xstate-jest-matchers";
+import { TestInterpreter } from "../src/xstate-test-interpreter";
+import * as Index from "../src/index";
+#+end_src
+* Tests
+
+#+begin_src js
+it("Everything is defined", () => {
+    expect(Index.toMatchState).toBeDefined();
+    expect(Index.TestInterpreter).toBeDefined();
+})
+
+it("Exposes everything", () => {
+    expect(Index.toMatchState).toBe(toMatchState);
+    expect(Index.TestInterpreter).toBe(TestInterpreter);
+})
+#+end_src
