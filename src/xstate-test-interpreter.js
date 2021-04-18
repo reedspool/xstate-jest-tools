@@ -50,7 +50,7 @@ class _TestInterpreter {
         // Get the side-effect actions to execute
         this.state.actions.forEach(action => {
             // If the action is executable, execute it
-            action.exec && action.exec();
+            action.exec && action.exec(this.C, event);
         });
     }
 // Implementation:4 ends here
