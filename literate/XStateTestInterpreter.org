@@ -104,7 +104,7 @@ When a transition occurs, we also execute any actions described as side effects.
         // Get the side-effect actions to execute
         this.state.actions.forEach(action => {
             // If the action is executable, execute it
-            action.exec && action.exec(this.C, event);
+            action.exec && action.exec(this.C, event, { state: this.state });
         });
     }
 #+end_src
